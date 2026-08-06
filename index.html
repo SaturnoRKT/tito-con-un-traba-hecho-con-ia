@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>😄</title>
+
+<style>
+html, body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:black;
+}
+
+#flash{
+    position:fixed;
+    inset:0;
+    background:white;
+    display:none;
+    z-index:2;
+}
+
+#scare{
+    position:fixed;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:none;
+    z-index:1;
+}
+</style>
+
+</head>
+
+<body>
+
+<img id="scare" src="./screamer.jpg">
+
+<div id="flash"></div>
+
+
+<audio id="audio" src="scream.mp3" preload="auto"></audio>
+
+<script>
+const flash = document.getElementById("flash");
+const img = document.getElementById("scare");
+const audio = document.getElementById("audio");
+
+console.log("Flash:", flash);
+console.log("Imagen:", img);
+console.log("Audio:", audio);
+
+img.onload = () => console.log("Imagen cargada correctamente.");
+img.onerror = () => console.error("No se pudo cargar la imagen.");
+
+audio.oncanplaythrough = () => console.log("Audio listo para reproducirse.");
+audio.onerror = () => console.error("No se pudo cargar el audio.");
+
+document.addEventListener("click", async function () {
+
+    console.log("Click detectado");
+
+    // Mostrar imagen
+    img.style.display = "block";
+
+    // Reproducir audio
+    try {
+        await audio.play();
+        console.log("Audio reproduciéndose.");
+    } catch (error) {
+        console.error("Error al reproducir el audio:", error);
+    }
+
+    // Flash
+    let contador = 0;
+
+    const intervalo = setInterval(() => {
+
+        flash.style.display =
+            flash.style.display === "block"
+            ? "none"
+            : "block";
+
+        contador++;
+
+        if (contador >= 30) {
+            clearInterval(intervalo);
+            flash.style.display = "none";
+        }
+
+    }, 80);
+
+}, { once: true });
+</script>
